@@ -84,8 +84,8 @@ define TAIL__DOCKER_RUN_INTEGRATION_TESTS
             echo '$(call TAIL__MESSAGE_DOCKER_BUILD_MOD_DOWNLOAD)' && \
             go mod download 2>/dev/null || go mod init temp-module && \
             echo '$(call TAIL__MESSAGE_DOCKER_INTEGRATION_TEST_RUN)' && \
-            go build -ldflags='-w -s' -o /app/app $(1) | sed 's|/src/||g' && \
-            ./tools/tests/integration_tests.sh ./tests/integration | sed 's|/src/||g' && \
+            go build -ldflags='-w -s' -o /app/tail $(1) | sed 's|/src/||g' && \
+            ./tools/tests/integration_tests.sh ./tests/integration /app | sed 's|/src/||g' && \
             echo '$(call TAIL__MESSAGE_DOCKER_INTEGRATION_TEST_SUCCESS)'\
         "
 endef
@@ -103,8 +103,8 @@ define TAIL__DOCKER_BUILD_INTEGRATION_EXPECTED
             echo '$(call TAIL__MESSAGE_DOCKER_BUILD_MOD_DOWNLOAD)' && \
             go mod download 2>/dev/null || go mod init temp-module && \
             echo '$(call TAIL__MESSAGE_DOCKER_BUILD_INTEGRATION_EXPECTED)' && \
-            go build -ldflags='-w -s' -o /app/app $(1) | sed 's|/src/||g' && \
-            ./tools/tests/make_integration_expected.sh ./tests/integration | sed 's|/src/||g' && \
+            go build -ldflags='-w -s' -o /app/tail $(1) | sed 's|/src/||g' && \
+            ./tools/tests/make_integration_expected.sh ./tests/integration /app | sed 's|/src/||g' && \
             echo '$(call TAIL__MESSAGE_DOCKER_BUILD_INTEGRATION_EXPECTED_SUCCESS)'\
         "
 endef

@@ -74,10 +74,35 @@ jobs:
       - name: Build Application
         run: |
           mkdir -p app
-          go build -ldflags='-w -s' -o ./app/app ./cmd/main.go
+          go build -ldflags='-w -s' -o ./.temp/app ./cmd/main.go
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: application-binary
-          path: ./app/app
+          path: ./.temp/app
+
+  integration-test:
+    name: Integration Tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+          cache: true
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: application-binary
+          path: ./.temp
+
+      - name: Run Integration Tests
+        run: |
+          chmod +x ./.temp/app
+          chmod +x ./tools/tests/integration_tests.sh
+          ./tools/tests/integration_tests.sh ./tests/integration ./.temp/app
