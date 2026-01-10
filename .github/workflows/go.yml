@@ -105,4 +105,4 @@ jobs:
         run: |
           chmod +x ./.temp/app
           chmod +x ./tools/tests/integration_tests.sh
-          ./tools/tests/integration_tests.sh ./tests/integration ./.temp/app
+          ./tools/tests/integration_tests.sh ./tests/integration ./.temp
