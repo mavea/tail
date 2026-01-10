@@ -26,11 +26,10 @@ jobs:
             exit 1
           fi
 
-      - name: Golangci-lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest # Использует версию, совместимую с Go 1.25
-          args: --config=.golangci.yml run ./...
+      - name: Install and Run Golangci-lint
+        run: |
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+          golangci-lint --config=.golangci.yml run ./...
 
       - name: Run Gosec
         run: |
