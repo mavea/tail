@@ -29,7 +29,7 @@ jobs:
       - name: Golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
-          version: latest
+          version: latest # Использует версию, совместимую с Go 1.25
           args: --config=.golangci.yml run ./...
 
       - name: Run Gosec
@@ -73,8 +73,9 @@ jobs:
           cache: true
 
       - name: Build Application
-        # Используем ./cmd/ для сборки из папки cmd
-        run: go build -ldflags='-w -s' -o ./app/app ./cmd/main.go
+        run: |
+          mkdir -p app
+          go build -ldflags='-w -s' -o ./app/app ./cmd/main.go
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
