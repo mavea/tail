@@ -27,9 +27,9 @@ jobs:
           fi
 
       - name: Install and Run Golangci-lint
-        run: |
-          go install github.com/golangci/golangci-lint/cmd/golangci-lint@master
-          golangci-lint --config=.golangci.yml run ./...
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.6
 
       - name: Run Gosec
         run: |
