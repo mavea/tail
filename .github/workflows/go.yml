@@ -106,11 +106,11 @@ jobs:
 
       - name: Build Application
         run: |
-          go build -trimpath -ldflags="-w -s -X tail/internal/bootstrap.Version=${{ steps.version.outputs.VERSION }} -X tail/internal/bootstrap.BuildTime=${{ steps.version.outputs.RELEASE_DATE }}" -o tail-new ./cmd/main.go
+          go build -trimpath -ldflags="-w -s -X tail/internal/bootstrap.Version=${{ steps.version.outputs.VERSION }} -X tail/internal/bootstrap.BuildTime=${{ steps.version.outputs.RELEASE_DATE }}" -o .temp/tail ./cmd/main.go
 
       #- name: Verify Binary Match
       #  run: |
-      #    if ! diff -q tail tail-new; then
+      #    if ! diff -q tail .temp/tail; then
       #      echo "Built binary does not match the one in the repository."
       #      exit 1
       #    fi
@@ -119,7 +119,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tail-binary
-          path: tail-new
+          path: .temp
 
   integration-test:
     name: Integration Tests
@@ -140,12 +140,12 @@ jobs:
           name: tail-binary
           path: .
 
-      - name: Rename Artifact
-        run: |
-          mv tail-binary/tail-new ./tail
-          chmod +x ./tail
+      #- name: Rename Artifact
+      #  run: |
+      #    mv tail-binary/tail-new ./tail
+      #    chmod +x ./tail
 
       - name: Run Integration Tests
         run: |
           chmod +x ./tools/make/sh/tests/integration_tests.sh
-          ./tools/make/sh/tests/integration_tests.sh ./tests/integration .
+          ./tools/make/sh/tests/integration_tests.sh ./tests/integration .temp
