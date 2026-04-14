@@ -11,7 +11,7 @@ LDFLAGS="-w -s -X tail/internal/bootstrap.Version=$APP_VERSION -X tail/internal/
 
 tmp=$(mktemp)
 set +e
-go build -ldflags="$LDFLAGS" -o "$1" "$2" >"$tmp" 2>&1
+go build -trimpath -ldflags="$LDFLAGS" -o "$1" "$2" >"$tmp" 2>&1
 rc=$?
 set -e
 [ -s "$tmp" ] && sed 's|/src/||g' "$tmp" >&2
