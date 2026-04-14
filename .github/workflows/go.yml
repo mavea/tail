@@ -143,6 +143,7 @@ jobs:
 
       - name: Run Integration Tests
         run: |
+          go build -trimpath -ldflags="-w -s -X tail/internal/bootstrap.Version=integration.tests -X tail/internal/bootstrap.BuildTime=0000.00.00" -o .temp/tail ./cmd/main.go
           chmod +x .temp/tail
           chmod +x ./tools/make/sh/tests/integration_tests.sh
           ./tools/make/sh/tests/integration_tests.sh ./tests/integration .temp
