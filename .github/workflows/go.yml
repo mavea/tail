@@ -92,30 +92,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.25.3'
-          cache: true
-
-      - name: Get Version info
-        id: version
-        run: |
-          echo "VERSION=$(sed -n 's/^VERSION=//p' version | head -n 1 | tr -d '\r')" >> $GITHUB_OUTPUT
-          echo "RELEASE_DATE=$(sed -n 's/^RELEASE_DATE=//p' version | head -n 1 | tr -d '\r')" >> $GITHUB_OUTPUT
-
-      - name: Build Application
+      - name: Build Application (same as make build toolchain)
         run: |
           mkdir -p .temp
-          go build -trimpath -ldflags="-w -s -X tail/internal/bootstrap.Version=${{ steps.version.outputs.VERSION }} -X tail/internal/bootstrap.BuildTime=${{ steps.version.outputs.RELEASE_DATE }}" -o .temp/tail ./cmd/main.go
+          cp tail .temp/tail.repo
+          docker run --rm \
+            -v "$PWD/.temp:/app" \
+            -v "$PWD:/src" \
+            -w /src \
+            golang:1.25.3-alpine3.22 \
+            sh -c "go mod download && sh ./tools/make/sh/build.sh /app/tail ./cmd/"
 
-      #- name: Verify Binary Match
-      #  run: |
-      #    if ! diff -q tail .temp/tail; then
-      #      echo "Built binary does not match the one in the repository."
-      #      exit 1
-      #    fi
-#
+      - name: Verify Binary Match
+        run: |
+          if ! cmp -s .temp/tail.repo .temp/tail; then
+            echo "Built binary does not match committed ./tail"
+            sha256sum .temp/tail.repo .temp/tail || true
+            exit 1
+          fi
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
