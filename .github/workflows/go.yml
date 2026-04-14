@@ -106,6 +106,7 @@ jobs:
 
       - name: Build Application
         run: |
+          mkdir -p .temp
           go build -trimpath -ldflags="-w -s -X tail/internal/bootstrap.Version=${{ steps.version.outputs.VERSION }} -X tail/internal/bootstrap.BuildTime=${{ steps.version.outputs.RELEASE_DATE }}" -o .temp/tail ./cmd/main.go
 
       #- name: Verify Binary Match
@@ -119,7 +120,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tail-binary
-          path: .temp
+          path: .temp/tail
 
   integration-test:
     name: Integration Tests
@@ -138,14 +139,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: tail-binary
-          path: .
-
-      #- name: Rename Artifact
-      #  run: |
-      #    mv tail-binary/tail-new ./tail
-      #    chmod +x ./tail
+          path: .temp
 
       - name: Run Integration Tests
         run: |
+          chmod +x .temp/tail
           chmod +x ./tools/make/sh/tests/integration_tests.sh
           ./tools/make/sh/tests/integration_tests.sh ./tests/integration .temp
