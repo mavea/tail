@@ -1,0 +1,139 @@
+[0m⡏ test
+[0mHello World
+[0m
+[0m1 : 11 | 11 : 0
+[1A[2K[1A[2K[1A[2K[1A[2K[0m⠟ test
+[0mHello World
+[0mtexttexttexttexttext text 0 0 0
+[0m
+[0m2 : 31 | 31 : 1
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⠻ test
+[0mHello World
+[0mtexttexttexttexttext text 0 0 0
+[0mtexttexttexttexttext text 0 1 1
+[0m
+[0m3 : 31 | 31 : 2
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⢹ test
+[0mHello World
+[0mtexttexttexttexttext text 0 0 0
+[0mtexttexttexttexttext text 0 1 1
+[0mtexttexttexttexttext text 0 2 2
+[0m
+[0m4 : 31 | 31 : 3
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣸ test
+[0mtexttexttexttexttext text 0 0 0
+[0mtexttexttexttexttext text 0 1 1
+[0mtexttexttexttexttext text 0 2 2
+[0mtexttexttexttexttext text 1 0 3
+[0m
+[0m5 : 31 | 31 : 4
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣴ test
+[0mtexttexttexttexttext text 0 1 1
+[0mtexttexttexttexttext text 0 2 2
+[0mtexttexttexttexttext text 1 0 3
+[0mtexttexttexttexttext text 1 1 4
+[0m
+[0m6 : 31 | 31 : 5
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣦ test
+[0mtexttexttexttexttext text 0 2 2
+[0mtexttexttexttexttext text 1 0 3
+[0mtexttexttexttexttext text 1 1 4
+[0mtexttexttexttexttext text 1 2 5
+[0m
+[0m7 : 31 | 31 : 6
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣇ test
+[0mtexttexttexttexttext text 1 0 3
+[0mtexttexttexttexttext text 1 1 4
+[0mtexttexttexttexttext text 1 2 5
+[0mtexttexttexttexttext text 2 0 6
+[0m
+[0m8 : 31 | 31 : 7
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⡏ test
+[0mtexttexttexttexttext text 1 1 4
+[0mtexttexttexttexttext text 1 2 5
+[0mtexttexttexttexttext text 2 0 6
+[0mtexttexttexttexttext text 2 1 7
+[0m
+[0m9 : 31 | 31 : 8
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⠟ test
+[0mtexttexttexttexttext text 1 2 5
+[0mtexttexttexttexttext text 2 0 6
+[0mtexttexttexttexttext text 2 1 7
+[0mtexttexttexttexttext text 2 2 8
+[0m
+[0m10 : 31 | 31 : 9
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⠻ test
+[0mtexttexttexttexttext text 2 0 6
+[0mtexttexttexttexttext text 2 1 7
+[0mtexttexttexttexttext text 2 2 8
+[0mtexttexttexttexttext text 3 0 9
+[0m
+[0m11 : 31 | 31 : 10
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⢹ test
+[0mtexttexttexttexttext text 2 1 7
+[0mtexttexttexttexttext text 2 2 8
+[0mtexttexttexttexttext text 3 0 9
+[0mtexttexttexttexttext text 3 1 10
+[0m
+[0m12 : 32 | 32 : 11
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣸ test
+[0mtexttexttexttexttext text 2 2 8
+[0mtexttexttexttexttext text 3 0 9
+[0mtexttexttexttexttext text 3 1 10
+[0mtexttexttexttexttext text 3 2 11
+[0m
+[0m13 : 32 | 32 : 12
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣴ test
+[0mtexttexttexttexttext text 3 0 9
+[0mtexttexttexttexttext text 3 1 10
+[0mtexttexttexttexttext text 3 2 11
+[0mtexttexttexttexttext text 4 0 12
+[0m
+[0m14 : 32 | 32 : 13
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣦ test
+[0mtexttexttexttexttext text 3 1 10
+[0mtexttexttexttexttext text 3 2 11
+[0mtexttexttexttexttext text 4 0 12
+[0mtexttexttexttexttext text 4 1 13
+[0m
+[0m15 : 32 | 32 : 14
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣇ test
+[0mtexttexttexttexttext text 3 2 11
+[0mtexttexttexttexttext text 4 0 12
+[0mtexttexttexttexttext text 4 1 13
+[0mtexttexttexttexttext text 4 2 14
+[0m
+[0m16 : 32 | 32 : 15
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⡏ test
+[0mtexttexttexttexttext text 4 0 12
+[0mtexttexttexttexttext text 4 1 13
+[0mtexttexttexttexttext text 4 2 14
+[0mError
+[0m
+[0m17 : 5 | 5 : 16
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0mHello World
+[0mtexttexttexttexttext text 0 0 0
+[0mtexttexttexttexttext text 0 1 1
+[0mtexttexttexttexttext text 0 2 2
+[0mtexttexttexttexttext text 1 0 3
+[0mtexttexttexttexttext text 1 1 4
+[0mtexttexttexttexttext text 1 2 5
+[0mtexttexttexttexttext text 2 0 6
+[0mtexttexttexttexttext text 2 1 7
+[0mtexttexttexttexttext text 2 2 8
+[0mtexttexttexttexttext text 3 0 9
+[0mtexttexttexttexttext text 3 1 10
+[0mtexttexttexttexttext text 3 2 11
+[0mtexttexttexttexttext text 4 0 12
+[0mtexttexttexttexttext text 4 1 13
+[0mtexttexttexttexttext text 4 2 14
+[0mError
+[0m
+========= ERROR =========
+panic: runtime error: index out of range [1] with length 0
+goroutine 1 [running]:
+main.main()
+	/home/runner/work/tail/tail/tests/integration/tail/8-panic/main.go:19 +0x21a
+
+========= STATUS =========
+2

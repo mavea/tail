@@ -1,56 +1,96 @@
 package main
 
 import (
-	"bufio"
 	"context"
+	"errors"
 	"fmt"
 	"os"
-	"tail/internal/adapters/renderers"
-	"tail/internal/adapters/sources"
-	"tail/internal/adapters/targets"
-	"tail/internal/config"
-	"tail/internal/processor"
+	"sync"
+
+	app "tail/internal/app"
+	config "tail/internal/config"
+	internalContext "tail/internal/context"
+	"tail/internal/formatter"
+)
+
+var (
+	defaultStderr = os.Stderr
+	defaultStdout = os.Stdout
+	defaultStdin  = os.Stdin
 )
 
 func main() {
+	err := execute()
+	if err != nil {
+		_, _ = fmt.Fprintf(defaultStderr, "Error: %v\n", err)
+	}
+	os.Exit(exitCodeFromError(err))
+}
+
+func exitCodeFromError(err error) int {
+	if err == nil {
+		return 0
+	}
+	var exitErr formatter.ExitError
+	if errors.As(err, &exitErr) {
+		return exitErr.Code
+	}
+
+	return 1
+}
+
+func execute() (retErr error) {
+	var (
+		err         error
+		cfg         app.Cfg
+		application *app.App
+		wg          sync.WaitGroup
+		ctx, cancel = internalContext.NewMainContext(context.Background(), defaultStderr, &wg)
+		appCancel   func() error
+	)
+
+	defer func() {
+		cancel()
+		if appCancel != nil {
+			if errC := appCancel(); errC != nil {
+				retErr = errors.Join(retErr, errC)
+			}
+		}
+		wg.Wait()
+	}()
+
+	// Create application
+	application, appCancel, err = app.NewApp(os.Stdout.Fd(), ctx, &wg)
+	if err != nil {
+		return err
+	}
+
+	// Set default standard streams
+	application.SetDefaultStd(defaultStdin, defaultStdout, defaultStderr)
+
+	// Detect language package
+	if err = application.DetectAndSetLanguage(os.Getenv("LANG")); err != nil {
+		return err
+	}
+
 	// Get Config
-	cfg, err := config.ReadConf()
+	cfg, err = config.ReadConf(application.GetLang())
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
-	// Make Context
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	// Init source
-	in, err := sources.NewScanner(ctx, cfg)
+	// Apply config
+	err = application.ApplyConfig(cfg)
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
-	// Init target
-	target, err := targets.New(cfg, bufio.NewWriter(os.Stdout))
+	// Run application
+	err = application.Run()
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
-	// Init renderer
-	out, cancelOut, err := renderers.New(ctx, target, cfg)
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
-	}
-	defer cancelOut()
+	return nil
 
-	// Init processor
-	service := processor.NewService(in, out)
-
-	// Start processor
-	if err = service.Run(ctx); err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-	}
 }

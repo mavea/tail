@@ -7,6 +7,7 @@ require (
 	github.com/onsi/gomega v1.38.3
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.8.4
+	golang.org/x/term v0.34.0
 )
 
 require (

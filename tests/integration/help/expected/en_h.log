@@ -1,0 +1,23 @@
+Usage:
+  tail [flags]
+
+Flags:
+  -c, --command string     the address of the executable file to be tracked. As an alternative, the pipe can be used to start
+  -f, --full               full output
+  -h, --help               display help information
+  -i, --icon string        icon in the program title
+  -r, --indicator string   specifying an element to display the program's running process (none, roller, bolded-roller, pipe) (default "none")
+  -l, --length int         maximum length of the output line
+  -n, --lines int          maximum number of lines for output to the screen (default 5)
+  -o, --output string      text output process option (modes: direct - output on new data, thread - periodic redraw) (default "direct")
+  -s, --size uint          maximum size of the stored buffer in number of lines (default 10240)
+  -t, --template string    data output template (none, minimal, full) (default "none")
+  -a, --title string       name in the program title
+  -v, --version            display version information
+Tail
+ Program for monitoring command execution and displaying their output in real-time with various modes and display templates. Supports both direct command execution and data retrieval via pipe. Deletes log upon successful completion, ensuring cleanliness and relevance of displayed information.
+For changing the language, when starting, specify the LANG variable in the format ru_RU.UTF-8, or en_US.UTF-8 (the first two characters are important)
+Examples of use:
+  tail -n 10 -o thread -t minimal -- ping google.com
+  tail -s 1000 -o direct -t full -- ping google.com
+  echo 'Hello World' | tail -o direct -t none
