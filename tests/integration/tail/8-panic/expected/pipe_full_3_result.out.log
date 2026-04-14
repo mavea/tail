@@ -104,7 +104,7 @@
 [0m21 : 11 | 11 : 20
 [1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣴ test
 [0mmain.main()
-[0m	/src/tests/integration/tail/8-panic/main.go:19 +0x21a
+[0m	/home/runner/work/tail/tail/tests/integration/tail/8-panic/main.go:19 +0x21a
 [0m
-[0m22 : 54 | 54 : 21
+[0m22 : 77 | 77 : 21
 [1A[2K[1A[2K[1A[2K[1A[2K[1A[2K

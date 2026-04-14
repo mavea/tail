@@ -83,6 +83,6 @@
 [0m
 [1A[2K[1A[2K[1A[2K[1A[2K[0m⣴ test
 [0mmain.main()
-[0m	/src/tests/integration/tail/8-panic/main.go:19 +0x21a
+[0m	/home/runner/work/tail/tail/tests/integration/tail/8-panic/main.go:19 +0x21a
 [0m
 [1A[2K[1A[2K[1A[2K[1A[2K

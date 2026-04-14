@@ -178,16 +178,16 @@ define TAIL__DOCKER_RUN_INTEGRATION_TESTS
 	@docker run --rm \
 		--name tail-integration_test \
         -v "${TAIL__APP_PATH}":/app \
-        -v "${TAIL__ROOT_PATH}":/src \
+        -v "${TAIL__ROOT_PATH}":/home/runner/work/tail/tail/ \
         -v tail-pkg-mod:/go/pkg/mod \
-        -w /src \
+        -w /home/runner/work/tail/tail/ \
         golang:1.25.3-alpine3.22 \
         sh -c " \
             set -o pipefail; \
             echo '$(call TAIL__MESSAGE_DOCKER_BUILD_MOD_DOWNLOAD)' && \
             go mod download && \
             echo '$(call TAIL__MESSAGE_DOCKER_INTEGRATION_TEST_RUN)' && \
-            go build -ldflags='-w -s -X tail/internal/bootstrap.Version=integration.tests -X tail/internal/bootstrap.BuildTime=0000.00.00' -o /app/tail $(1) | sed 's|/src/||g' && \
+            go build -ldflags='-w -s -X tail/internal/bootstrap.Version=integration.tests -X tail/internal/bootstrap.BuildTime=0000.00.00' -o /app/tail $(1) | sed 's|/home/runner/work/tail/tail/||g' && \
             sh ./tools/make/sh/tests/integration_tests.sh ./tests/integration /app --color=always && \
             echo '$(call TAIL__MESSAGE_DOCKER_INTEGRATION_TEST_SUCCESS)' || \
             { echo '$(call TAIL__MESSAGE_DOCKER_INTEGRATION_TEST_FAIL)'; exit 1; } \
@@ -199,16 +199,16 @@ define TAIL__DOCKER_BUILD_INTEGRATION_EXPECTED
 	@docker run --rm \
 		--name tail-build \
         -v "${TAIL__APP_PATH}":/app \
-        -v "${TAIL__ROOT_PATH}":/src \
+        -v "${TAIL__ROOT_PATH}":/home/runner/work/tail/tail \
         -v tail-pkg-mod:/go/pkg/mod \
-        -w /src \
+        -w /home/runner/work/tail/tail \
         golang:1.25.3-alpine3.22 \
         sh -c " \
             echo '$(call TAIL__MESSAGE_DOCKER_BUILD_MOD_DOWNLOAD)' && \
             go mod download && \
             echo '$(call TAIL__MESSAGE_DOCKER_BUILD_INTEGRATION_EXPECTED)' && \
-            go build -ldflags='-w -s -X tail/internal/bootstrap.Version=integration.tests -X tail/internal/bootstrap.BuildTime=0000.00.00' -o /app/tail $(1) | sed 's|/src/||g' && \
-            sh ./tools/make/sh/tests/make_integration_expected.sh ./tests/integration /app | sed 's|/src/||g' && \
+            go build -ldflags='-w -s -X tail/internal/bootstrap.Version=integration.tests -X tail/internal/bootstrap.BuildTime=0000.00.00' -o /app/tail $(1) | sed 's|/home/runner/work/tail/tail/||g' && \
+            sh ./tools/make/sh/tests/make_integration_expected.sh ./tests/integration /app | sed 's|/home/runner/work/tail/tail/||g' && \
             echo '$(call TAIL__MESSAGE_DOCKER_BUILD_INTEGRATION_EXPECTED_SUCCESS)'\
         "
 endef

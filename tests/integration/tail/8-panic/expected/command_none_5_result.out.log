@@ -99,7 +99,7 @@
 panic: runtime error: index out of range [1] with length 0
 goroutine 1 [running]:
 main.main()
-	/src/tests/integration/tail/8-panic/main.go:19 +0x21a
+	/home/runner/work/tail/tail/tests/integration/tail/8-panic/main.go:19 +0x21a
 
 ========= STATUS =========
 2
