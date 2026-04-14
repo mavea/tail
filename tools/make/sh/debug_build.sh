@@ -12,7 +12,7 @@ LDFLAGS="-X tail/internal/bootstrap.Version=$APP_VERSION -X tail/internal/bootst
 
 tmp=$(mktemp)
 set +e
-go build -gcflags="all=-N -l" -ldflags "$LDFLAGS" -o /app/tail-debug ./cmd >"$tmp" 2>&1
+go build -trimpath -gcflags="all=-N -l" -ldflags "$LDFLAGS" -o /app/tail-debug ./cmd >"$tmp" 2>&1
 rc=$?
 set -e
 [ -s "$tmp" ] && sed 's|/src/||g' "$tmp" >&2
