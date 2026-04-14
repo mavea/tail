@@ -27,9 +27,9 @@ jobs:
           fi
 
       - name: Install and Run Golangci-lint
-        uses: golangci/golangci-lint-action@v9
+        uses: golangci/golangci-lint-action@v6
         with:
-          version: v2.6
+          version: v1.64
 
       - name: Run Gosec
         run: |
@@ -39,8 +39,8 @@ jobs:
       - name: Go Mod Verify
         run: go mod verify
 
-  unit-test:
-    name: Unit Tests
+  generate-check:
+    name: Mocks Generation Check
     needs: lint
     runs-on: ubuntu-latest
     steps:
@@ -52,14 +52,41 @@ jobs:
           go-version: '1.25'
           cache: true
 
+      - name: Install Mockery
+        run: go install github.com/vektra/mockery/v2@latest
+
+      - name: Run Go Generate
+        run: go generate ./tests/mocks
+
+      - name: Check for changes
+        run: |
+          if [ -n "$(git status --porcelain tests/mocks)" ]; then
+            echo "Mocks are out of date. Please run 'make generate' and commit the changes."
+            git diff tests/mocks
+            exit 1
+          fi
+
+  unit-test:
+    name: Unit Tests
+    needs: generate-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+          cache: true
+
       - name: Install Ginkgo
-        run: go install github.com/onsi/ginkgo/v2/ginkgo@latest
+        run: go install github.com/onsi/ginkgo/v2/ginkgo@v2.27.3
 
       - name: Run Ginkgo Tests
         run: ginkgo -r ./...
 
-  build:
-    name: Build
+  build-and-verify:
+    name: Build and Verify
     needs: unit-test
     runs-on: ubuntu-latest
     steps:
@@ -71,20 +98,32 @@ jobs:
           go-version: '1.25'
           cache: true
 
+      - name: Get Version info
+        id: version
+        run: |
+          echo "VERSION=$(sed -n 's/^VERSION=//p' version | head -n 1 | tr -d '\r')" >> $GITHUB_OUTPUT
+          echo "RELEASE_DATE=$(sed -n 's/^RELEASE_DATE=//p' version | head -n 1 | tr -d '\r')" >> $GITHUB_OUTPUT
+
       - name: Build Application
         run: |
-          mkdir -p app
-          go build -ldflags='-w -s' -o ./.temp/app ./cmd/main.go
+          go build -ldflags="-w -s -X tail/internal/bootstrap.Version=${{ steps.version.outputs.VERSION }} -X tail/internal/bootstrap.BuildTime=${{ steps.version.outputs.RELEASE_DATE }}" -o tail-new ./cmd/main.go
+
+      - name: Verify Binary Match
+        run: |
+          if ! diff tail tail-new; then
+            echo "Built binary does not match the one in the repository."
+            exit 1
+          fi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: application-binary
-          path: ./.temp/app
+          name: tail-binary
+          path: tail-new
 
   integration-test:
     name: Integration Tests
-    needs: build
+    needs: build-and-verify
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -98,11 +137,15 @@ jobs:
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
-          name: application-binary
-          path: ./.temp
+          name: tail-binary
+          path: .
+
+      - name: Rename Artifact
+        run: |
+          mv tail-binary/tail-new ./tail
+          chmod +x ./tail
 
       - name: Run Integration Tests
         run: |
-          chmod +x ./.temp/app
-          chmod +x ./tools/tests/integration_tests.sh
-          ./tools/tests/integration_tests.sh ./tests/integration ./.temp
+          chmod +x ./tools/make/sh/tests/integration_tests.sh
+          ./tools/make/sh/tests/integration_tests.sh ./tests/integration .

@@ -1,0 +1,97 @@
+[0m⡏ test
+[0mHello World
+[0m
+[1A[2K[1A[2K[1A[2K[0m⠟ test
+[0mHello World
+[0mtexttexttexttexttext text 0 0 0
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[0m⠻ test
+[0mHello World
+[0mtexttexttexttexttext text 0 0 0
+[0mtexttexttexttexttext text 0 1 1
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⢹ test
+[0mHello World
+[0mtexttexttexttexttext text 0 0 0
+[0mtexttexttexttexttext text 0 1 1
+[0mtexttexttexttexttext text 0 2 2
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣸ test
+[0mtexttexttexttexttext text 0 0 0
+[0mtexttexttexttexttext text 0 1 1
+[0mtexttexttexttexttext text 0 2 2
+[0mtexttexttexttexttext text 1 0 3
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣴ test
+[0mtexttexttexttexttext text 0 1 1
+[0mtexttexttexttexttext text 0 2 2
+[0mtexttexttexttexttext text 1 0 3
+[0mtexttexttexttexttext text 1 1 4
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣦ test
+[0mtexttexttexttexttext text 0 2 2
+[0mtexttexttexttexttext text 1 0 3
+[0mtexttexttexttexttext text 1 1 4
+[0mtexttexttexttexttext text 1 2 5
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣇ test
+[0mtexttexttexttexttext text 1 0 3
+[0mtexttexttexttexttext text 1 1 4
+[0mtexttexttexttexttext text 1 2 5
+[0mtexttexttexttexttext text 2 0 6
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⡏ test
+[0mtexttexttexttexttext text 1 1 4
+[0mtexttexttexttexttext text 1 2 5
+[0mtexttexttexttexttext text 2 0 6
+[0mtexttexttexttexttext text 2 1 7
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⠟ test
+[0mtexttexttexttexttext text 1 2 5
+[0mtexttexttexttexttext text 2 0 6
+[0mtexttexttexttexttext text 2 1 7
+[0mtexttexttexttexttext text 2 2 8
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⠻ test
+[0mtexttexttexttexttext text 2 0 6
+[0mtexttexttexttexttext text 2 1 7
+[0mtexttexttexttexttext text 2 2 8
+[0mtexttexttexttexttext text 3 0 9
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⢹ test
+[0mtexttexttexttexttext text 2 1 7
+[0mtexttexttexttexttext text 2 2 8
+[0mtexttexttexttexttext text 3 0 9
+[0mtexttexttexttexttext text 3 1 10
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣸ test
+[0mtexttexttexttexttext text 2 2 8
+[0mtexttexttexttexttext text 3 0 9
+[0mtexttexttexttexttext text 3 1 10
+[0mtexttexttexttexttext text 3 2 11
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣴ test
+[0mtexttexttexttexttext text 3 0 9
+[0mtexttexttexttexttext text 3 1 10
+[0mtexttexttexttexttext text 3 2 11
+[0mtexttexttexttexttext text 4 0 12
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣦ test
+[0mtexttexttexttexttext text 3 1 10
+[0mtexttexttexttexttext text 3 2 11
+[0mtexttexttexttexttext text 4 0 12
+[0mtexttexttexttexttext text 4 1 13
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⣇ test
+[0mtexttexttexttexttext text 3 2 11
+[0mtexttexttexttexttext text 4 0 12
+[0mtexttexttexttexttext text 4 1 13
+[0mtexttexttexttexttext text 4 2 14
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⡏ test
+[0mtexttexttexttexttext text 4 0 12
+[0mtexttexttexttexttext text 4 1 13
+[0mtexttexttexttexttext text 4 2 14
+[0mEnd
+[0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K

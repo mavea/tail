@@ -1,0 +1,15 @@
+[0m⡏ test
+[0msave
+[0m
+[0m1 : 4 | 4 : 0
+[1A[2K[1A[2K[1A[2K[1A[2K[0m⠟ test
+[0msave
+[0mmove
+[0m
+[0m2 : 4 | 4 : 1
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⠻ test
+[0mmove
+[0mrestore
+[0m
+[0m3 : 7 | 7 : 2
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K

@@ -1,233 +1,148 @@
 package config
 
 import (
-	"errors"
+	"tail/internal/formatter"
+	"testing"
 
-	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
+	sinkConsoleIndicator "tail/internal/sink/console/indicator"
+	sinkConsoleTemplate "tail/internal/sink/console/template"
 )
 
-type mockStringValue struct {
-	value string
-	err   error
-}
-
-func (m *mockStringValue) String() string {
-	return m.value
-}
-
-func (m *mockStringValue) Set(v string) error {
-	if m.err != nil {
-		return m.err
+func TestCfgGettersAndSetters(t *testing.T) {
+	cfg := Cfg{
+		maxLineCount:    10,
+		maxCharsPerLine: 100,
+		maxBufferLines:  1000,
+		processName:     "test-proc",
+		processIcon:     "🔧",
+		outputMode:      formatter.NewOutputMode(),
+		outputTemplate:  sinkConsoleTemplate.NewTemplateType(),
+		indicator:       sinkConsoleIndicator.NewIndicatorType(),
+		help:            false,
+		version:         false,
+		command:         "cmd",
+		args:            []string{"arg1"},
 	}
-	m.value = v
-	return nil
+
+	if cfg.GetMaxLineCount() != 10 {
+		t.Fatalf("unexpected maxLineCount: %d", cfg.GetMaxLineCount())
+	}
+	cfg.SetMaxLineCount(20)
+	if cfg.GetMaxLineCount() != 20 {
+		t.Fatalf("unexpected maxLineCount after set: %d", cfg.GetMaxLineCount())
+	}
+
+	if cfg.GetMaxCharsPerLine() != 100 {
+		t.Fatalf("unexpected maxCharsPerLine: %d", cfg.GetMaxCharsPerLine())
+	}
+	cfg.SetMaxCharsPerLine(200)
+	if cfg.GetMaxCharsPerLine() != 200 {
+		t.Fatalf("unexpected maxCharsPerLine after set: %d", cfg.GetMaxCharsPerLine())
+	}
+
+	if cfg.GetMaxBufferLines() != 1000 {
+		t.Fatalf("unexpected maxBufferLines: %d", cfg.GetMaxBufferLines())
+	}
+
+	if cfg.GetProcessName() != "test-proc" {
+		t.Fatalf("unexpected processName: %s", cfg.GetProcessName())
+	}
+
+	if cfg.GetProcessIcon() != "🔧" {
+		t.Fatalf("unexpected processIcon: %s", cfg.GetProcessIcon())
+	}
+
+	if !cfg.IsHelp() != true {
+		t.Fatalf("unexpected help flag")
+	}
+	if !cfg.IsVersion() != true {
+		t.Fatalf("unexpected version flag")
+	}
+
+	if cfg.GetCommand() != "cmd" {
+		t.Fatalf("unexpected command: %s", cfg.GetCommand())
+	}
+
+	if len(cfg.GetArgs()) != 1 || cfg.GetArgs()[0] != "arg1" {
+		t.Fatalf("unexpected args: %v", cfg.GetArgs())
+	}
+
+	if cfg.IsCSIEnabled() {
+		t.Fatal("expected CSI to be not enabled")
+	}
 }
 
-func (m *mockStringValue) Type() string {
-	return "mockStringValue"
+func TestCfgValidate(t *testing.T) {
+	cfg := Cfg{
+		maxLineCount:    10,
+		maxCharsPerLine: 100,
+		maxBufferLines:  1000,
+		outputMode:      formatter.NewOutputMode(),
+		outputTemplate:  sinkConsoleTemplate.NewTemplateType(),
+		indicator:       sinkConsoleIndicator.NewIndicatorType(),
+	}
+
+	if err := cfg.Validate(); err != nil {
+		t.Fatalf("valid config failed validation: %v", err)
+	}
+
+	cfg.maxLineCount = 0
+	if err := cfg.Validate(); err == nil {
+		t.Fatal("expected error for zero maxLineCount")
+	}
+
+	cfg.maxLineCount = 251
+	if err := cfg.Validate(); err == nil {
+		t.Fatal("expected error for maxLineCount > 250")
+	}
+
+	cfg.maxLineCount = 10
+	cfg.maxCharsPerLine = -1
+	if err := cfg.Validate(); err == nil {
+		t.Fatal("expected error for negative maxCharsPerLine")
+	}
+
+	cfg.maxCharsPerLine = 1001
+	if err := cfg.Validate(); err == nil {
+		t.Fatal("expected error for maxCharsPerLine > 1000")
+	}
+
+	cfg.maxCharsPerLine = 100
+	cfg.maxBufferLines = 0
+	if err := cfg.Validate(); err == nil {
+		t.Fatal("expected error for zero maxBufferLines")
+	}
+
+	cfg.maxBufferLines = 1000
+	cfg.command = "echo ok"
+	cfg.args = []string{"file.log"}
+	if err := cfg.Validate(); err == nil {
+		t.Fatal("expected error for command + args")
+	}
+
+	cfg.command = ""
+	cfg.args = []string{"a.log", "b.log"}
+	if err := cfg.Validate(); err == nil {
+		t.Fatal("expected error for multiple file args")
+	}
 }
 
-var _ = Describe("Config", func() {
-	Context("GetCountLines", func() {
-		DescribeTable("Sunny",
-			func(initial, expected uint64) {
-				cfg := &config{countLines: initial}
-				Expect(cfg.GetCountLines()).To(Equal(expected))
-			},
-			Entry("zero", uint64(0), uint64(0)),
-			Entry("not zero", uint64(10), uint64(10)),
-		)
-	})
-	Context("GetLengthLines", func() {
-		DescribeTable("Sunny",
-			func(initial int, expected int) {
-				cfg := &config{lengthLines: initial}
-				Expect(cfg.GetLengthLines()).To(Equal(expected))
-			},
-			Entry("zero", int(0), int(0)),
-			Entry("not zero", int(50), int(50)),
-		)
-	})
-	Context("GetSizeBuffer", func() {
-		DescribeTable("Sunny",
-			func(initial, expected uint64) {
-				cfg := &config{sizeBuffer: initial}
-				Expect(cfg.GetSizeBuffer()).To(Equal(expected))
-			},
-			Entry("zero", uint64(0), uint64(0)),
-			Entry("not zero", uint64(100), uint64(100)),
-		)
-	})
-	Context("GetProcessName", func() {
-		DescribeTable("Sunny",
-			func(initial, expected string) {
-				cfg := &config{processName: initial}
-				Expect(cfg.GetProcessName()).To(Equal(expected))
-			},
-			Entry("zero", "", ""),
-			Entry("not zero", "testProcess", "testProcess"),
-		)
-	})
-	Context("SetProcessName", func() {
-		DescribeTable("Sunny",
-			func(initial, expected string) {
-				cfg := &config{}
-				cfg.SetProcessName(initial)
-				Expect(cfg.GetProcessName()).To(Equal(expected))
-			},
-			Entry("zero", "", ""),
-			Entry("not zero", "newProcess", "newProcess"),
-		)
-	})
-	Context("GetProcessIcon", func() {
-		DescribeTable("Sunny",
-			func(initial, expected string) {
-				cfg := &config{processIcon: initial}
-				Expect(cfg.GetProcessIcon()).To(Equal(expected))
-			},
-			Entry("zero", "", ""),
-			Entry("not zero", "✅", "✅"),
-		)
-	})
-	Context("SetProcessIcon", func() {
-		DescribeTable("Sunny",
-			func(initial, expected string) {
-				cfg := &config{}
-				cfg.SetProcessIcon(initial)
-				Expect(cfg.GetProcessIcon()).To(Equal(expected))
-			},
-			Entry("zero", "", ""),
-			Entry("not zero", "🔨", "🔨"),
-		)
-	})
-	Context("IsHelp", func() {
-		DescribeTable("Sunny",
-			func(initial, expected bool) {
-				cfg := &config{help: initial}
-				Expect(cfg.IsHelp()).To(Equal(expected))
-			},
-			Entry("false", false, false),
-			Entry("true", true, true),
-		)
-	})
-	Context("IsVersion", func() {
-		DescribeTable("Sunny",
-			func(initial, expected bool) {
-				cfg := &config{version: initial}
-				Expect(cfg.IsVersion()).To(Equal(expected))
-			},
-			Entry("false", false, false),
-			Entry("true", true, true),
-		)
-	})
-	Context("GetCommand", func() {
-		DescribeTable("Sunny",
-			func(initial, expected string) {
-				cfg := &config{command: initial}
-				Expect(cfg.GetCommand()).To(Equal(expected))
-			},
-			Entry("zero", "", ""),
-			Entry("not zero", "testCommand", "testCommand"),
-		)
-	})
-	Context("GetArgs", func() {
-		DescribeTable("Sunny",
-			func(initial, expected []string) {
-				cfg := &config{args: initial}
-				Expect(cfg.GetArgs()).To(Equal(expected))
-			},
-			Entry("nil", nil, nil),
-			Entry("empty", []string{}, []string{}),
-			Entry("one", []string{"arg"}, []string{"arg"}),
-			Entry("two", []string{"arg1", "arg2"}, []string{"arg1", "arg2"}),
-		)
-	})
-	Context("ReplaceOutputMode", func() {
-		DescribeTable("Sunny",
-			func(initial StringValue, expected string, wantErr error) {
-				cfg := &config{outputMode: &mockStringValue{value: "oldOutput"}}
+func TestCfgGetOutputTemplate(t *testing.T) {
+	cfg := Cfg{
+		outputTemplate: sinkConsoleTemplate.NewTemplateType(),
+	}
 
-				err := cfg.ReplaceOutputMode(initial)
-				if wantErr != nil {
-					Expect(err).To(Equal(wantErr))
-				} else {
-					Expect(err).To(BeNil())
-				}
-				if err == nil {
-					Expect(cfg.GetOutputMode()).To(Equal(expected))
-				}
-			},
-			Entry("valid", &mockStringValue{value: "newOutput"}, "oldOutput", nil),
-			Entry("error", &mockStringValue{err: errors.New("failure")}, "", errors.New("failure")),
-		)
-	})
-	Context("GetOutputMode", func() {
-		DescribeTable("Sunny",
-			func(initial, expected string) {
-				cfg := &config{outputMode: &mockStringValue{value: initial}}
-				Expect(cfg.GetOutputMode()).To(Equal(expected))
-			},
-			Entry("zero", "", ""),
-			Entry("not zero", "mode", "mode"),
-		)
-	})
-	Context("ReplaceTemplate", func() {
-		DescribeTable("Sunny",
-			func(initial StringValue, expected string, wantErr error) {
-				cfg := &config{template: &mockStringValue{value: "oldTemplate"}}
+	if cfg.GetOutputTemplate() != "none" {
+		t.Fatalf("unexpected template: %s", cfg.GetOutputTemplate())
+	}
+}
 
-				err := cfg.ReplaceTemplate(initial)
-				if wantErr == nil {
-					Expect(err).To(BeNil())
-				} else {
-					Expect(err).To(Equal(wantErr))
-				}
-				if err == nil {
-					Expect(cfg.GetTemplate()).To(Equal(expected))
-				}
-			},
-			Entry("valid", &mockStringValue{value: "newTemplate"}, "oldTemplate", nil),
-			Entry("error", &mockStringValue{err: errors.New("failure")}, "", errors.New("failure")),
-		)
-	})
-	Context("GetTemplate", func() {
-		DescribeTable("Sunny",
-			func(initial, expected string) {
-				cfg := &config{template: &mockStringValue{value: initial}}
-				Expect(cfg.GetTemplate()).To(Equal(expected))
-			},
-			Entry("zero", "", ""),
-			Entry("not zero", "template", "template"),
-		)
-	})
-	Context("ReplaceIndicator", func() {
-		DescribeTable("Sunny",
-			func(initial StringValue, expected string, wantErr error) {
-				cfg := &config{indicator: &mockStringValue{value: "oldTemplate"}}
+func TestCfgGetIndicator(t *testing.T) {
+	cfg := Cfg{
+		indicator: sinkConsoleIndicator.NewIndicatorType(),
+	}
 
-				err := cfg.ReplaceIndicator(initial)
-				if wantErr != nil {
-					Expect(err).To(Equal(wantErr))
-				} else {
-					Expect(err).To(BeNil())
-				}
-				if err == nil {
-					Expect(cfg.GetIndicator()).To(Equal(expected))
-				}
-			},
-			Entry("valid", &mockStringValue{value: "newIndicator"}, "oldTemplate", nil),
-			Entry("error", &mockStringValue{err: errors.New("failure")}, "", errors.New("failure")),
-		)
-	})
-	Context("GetIndicator", func() {
-		DescribeTable("Sunny",
-			func(initial, expected string) {
-				cfg := &config{indicator: &mockStringValue{value: initial}}
-				Expect(cfg.GetIndicator()).To(Equal(expected))
-			},
-			Entry("zero", "", ""),
-			Entry("not zero", "mode", "mode"),
-		)
-	})
-})
+	if cfg.GetIndicator() == "" {
+		t.Fatal("expected non-empty indicator")
+	}
+}

@@ -1,0 +1,16 @@
+[0m⡏ test
+[0malt-save
+[0m
+[0m1 : 8 | 8 : 0
+[1A[2K[1A[2K[1A[2K[1A[2K[0m⠟ test
+[0malt-save
+[0malt-move
+[0m
+[0m2 : 8 | 8 : 1
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[0m⠻ test
+[0malt-save
+[0malt-move
+[0malt-restore
+[0m
+[0m3 : 11 | 11 : 2
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K
